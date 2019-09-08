@@ -67,6 +67,8 @@ rotariesdef rotaries[NUMROTARIES] {
 
 // Define the mapping between button and led 
 int ledMap[][2] = {
+
+  // Buttons
   { 'a', ledpinA0 },
   { 'b', ledpinA0 },
   { 'c', ledpinA0 },
@@ -83,6 +85,7 @@ int ledMap[][2] = {
   { 'n', ledpinA0 },
   { 'o', ledpinA0 },
 
+  // Rotary
   { 'q', ledpinA0 },
   { 'r', ledpinA0 },
   { 's', ledpinA0 },
