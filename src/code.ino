@@ -1,10 +1,8 @@
-/*
-Arduino Pro Micro Button box with 3 encoders, 15 buttons and 4 function led
-this sketch was created and designed
-by Kevin Rietveld
+// Arduino Pro Micro Button box with 3 encoders, 15 buttons and 4 function led
+// this sketch was created and designed
+// by Kevin Rietveld
 
-# Version 0.01
-*/
+// - Version 0.01
 
 #include <Keypad.h> 
 #include <Keyboard.h>
@@ -83,33 +81,39 @@ int ledMap[][2] = {
   { 'l', ledpinA0 },
   { 'm', ledpinA0 },
   { 'n', ledpinA0 },
-  { 'o', ledpinA0 }
+  { 'o', ledpinA0 },
+
+  { 'q', ledpinA0 },
+  { 'r', ledpinA0 },
+  { 's', ledpinA0 },
+  { 't', ledpinA0 },
+  { 'u', ledpinA0 },
+  { 'v', ledpinA0 }
 };
 
 
 const unsigned char ttable[7][4] = {
   // R_START
-  {R_START,    R_CW_BEGIN,  R_CCW_BEGIN, R_START},
+  { R_START,    R_CW_BEGIN,  R_CCW_BEGIN, R_START },
   // R_CW_FINAL
-  {R_CW_NEXT,  R_START,     R_CW_FINAL,  R_START | DIR_CW},
+  { R_CW_NEXT,  R_START,     R_CW_FINAL,  R_START | DIR_CW },
   // R_CW_BEGIN
-  {R_CW_NEXT,  R_CW_BEGIN,  R_START,     R_START},
+  { R_CW_NEXT,  R_CW_BEGIN,  R_START,     R_START },
   // R_CW_NEXT
-  {R_CW_NEXT,  R_CW_BEGIN,  R_CW_FINAL,  R_START},
+  { R_CW_NEXT,  R_CW_BEGIN,  R_CW_FINAL,  R_START },
   // R_CCW_BEGIN
-  {R_CCW_NEXT, R_START,     R_CCW_BEGIN, R_START},
+  { R_CCW_NEXT, R_START,     R_CCW_BEGIN, R_START },
   // R_CCW_FINAL
-  {R_CCW_NEXT, R_CCW_FINAL, R_START,     R_START | DIR_CCW},
+  { R_CCW_NEXT, R_CCW_FINAL, R_START,     R_START | DIR_CCW },
   // R_CCW_NEXT
-  {R_CCW_NEXT, R_CCW_FINAL, R_CCW_BEGIN, R_START},
+  { R_CCW_NEXT, R_CCW_FINAL, R_CCW_BEGIN, R_START },
 };
 
 byte rowPins[NUMROWS] = { 6,  7,  8,  9 };     // Connect to the row pinouts of the keypad
 byte colPins[NUMCOLS] = { 15, 14, 16, 10 }; // Connect to the column pinouts of the keypad
 
 //initialize an instance of class NewKeypad
-Keypad buttbx = Keypad( makeKeymap(buttons), rowPins, colPins, NUMROWS, NUMCOLS);
-
+Keypad buttbx = Keypad(makeKeymap(buttons), rowPins, colPins, NUMROWS, NUMCOLS);
 
 void initLeds() {
 
