@@ -203,28 +203,8 @@ void CheckAllEncoders(void) {
   for (int i = 0; i < NUMROTARIES; i++) {
     unsigned char result = rotary_process(i);
     if (result) {
-      Keyboard.write(result == DIR_CCW ? rotaries[i].ccwchar : rotaries[i].cwchar );
-
-        //detects array characters assigned to a specific encoders and blinks led
-        // ccw = counter clockwise
-        //cw =clock
-        // (rotaries[i].ccwchar being used below in the if statement,
-        //will call all characters in ccwchar scope.
-      if(rotaries[i].ccwchar == 'u'){          //  blink led from any rotation               
-      digitalWrite(ledpinA0,LOW);
-      delay(50);
-      digitalWrite(ledpinA0,HIGH);
-      delay(50);
+      buttonPress(result == DIR_CCW ? rotaries[i].ccwchar : rotaries[i].cwchar);
+      // Maybe use delay of 50 and without key release
     }
-   if(rotaries[i].ccwchar == 'w'){                         
-      digitalWrite(ledpinA0,LOW);
-      delay(50);
-      digitalWrite(ledpinA0,HIGH);
-      delay(50);
-    }
-      
-      
-
-    }
-   }
+  }
 }
