@@ -4,9 +4,8 @@
 
 // - Version 0.01
 
-#include <Keypad.h> 
 #include <Keyboard.h>
-
+#include <Keypad.h> 
 
 // Variables
 #define ENABLE_PULLUPS
@@ -164,10 +163,10 @@ void loop() {
 void buttonPress(char keyPress) {
   for (int idx = 0; idx < NUMBUTTONS; idx++)
   {
-    char key = ledMap[idx, 0];
+    char key = ledMap[idx][0];
     if(key == keyPress)
     {
-      uint8_t led = ledMap[idx, 1];
+      uint8_t led = ledMap[idx][1];
       Keyboard.write(key);
       digitalWrite(led, LOW);
       delay(150);
