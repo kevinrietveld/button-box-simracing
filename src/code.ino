@@ -35,11 +35,6 @@ boolean ledA1_state;
 boolean ledA2_state;
 boolean ledA3_state;
 
-unsigned long loopCount;
-unsigned long startTime;
-String msg;
-
-
 // Define the symbols on the buttons of the keypads               
 char buttons[NUMROWS][NUMCOLS] = {
   // 15  14  16, 10
