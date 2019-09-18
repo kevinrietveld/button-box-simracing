@@ -38,10 +38,10 @@ boolean ledA3_state;
 // Define the symbols on the buttons of the keypads               
 char buttons[NUMROWS][NUMCOLS] = {
   // 15  14  16, 10
-  {'a','b','c','d'},     // 6
-  {'e','f','g','h'},     // 7
-  {'i','j','k','l'},     // 8   
-  {'m','n','o','p'}      // 9
+  { 'a','b','c','d' },     // 6
+  { 'e','f','g','h' },     // 7
+  { 'i','j','k','l' },     // 8   
+  { 'm','n','o','p' }      // 9
 };
 
 // Define the rotary encoders
@@ -54,7 +54,7 @@ struct rotariesdef {
 };
 
 rotariesdef rotaries[NUMROTARIES] {
-  { 0, 1, 'q', 'r' }, // encoder connected to pin 0 and 1
+  { 0, 1, 'q', 'r' }, // encoder connected to pin 0 and 1 (TX0/RX1)
   { 2, 3, 's', 't' }, // encoder connected to pin 2 and 3
   { 4, 5, 'u', 'v' }, // encoder connected to pin 4 and 5
 };
@@ -106,7 +106,7 @@ const unsigned char ttable[7][4] = {
   { R_CCW_NEXT, R_CCW_FINAL, R_CCW_BEGIN, R_START },
 };
 
-byte rowPins[NUMROWS] = { 6,  7,  8,  9 };     // Connect to the row pinouts of the keypad
+byte rowPins[NUMROWS] = { 6,  7,  8,  9 };  // Connect to the row pinouts of the keypad
 byte colPins[NUMCOLS] = { 15, 14, 16, 10 }; // Connect to the column pinouts of the keypad
 
 //initialize an instance of class NewKeypad
@@ -132,9 +132,9 @@ void initLeds() {
 void blinkLedRow(int times = 3) {
   for (int i = 0; i < times; i++)
   {
-    digitalWrite(ledpinA1,HIGH); delay(200);
-    digitalWrite(ledpinA2,HIGH); delay(200);
-    digitalWrite(ledpinA3,HIGH); delay(200);
+    digitalWrite(ledpinA1,HIGH); delay(250);
+    digitalWrite(ledpinA2,HIGH); delay(250);
+    digitalWrite(ledpinA3,HIGH); delay(250);
     digitalWrite(ledpinA1,LOW);
     digitalWrite(ledpinA2,LOW);
     digitalWrite(ledpinA3,LOW);
@@ -195,8 +195,9 @@ void rotary_init() {
  * Returns 0 on no event, otherwise 0x80 or 0x40 depending on the direction.
 */
 unsigned char rotary_process(int _i) {
-   unsigned char pinstate = (digitalRead(rotaries[_i].pin2) << 1) | digitalRead(rotaries[_i].pin1);
+  unsigned char pinstate = (digitalRead(rotaries[_i].pin2) << 1) | digitalRead(rotaries[_i].pin1);
   rotaries[_i].state = ttable[rotaries[_i].state & 0xf][pinstate];
+
   return (rotaries[_i].state & 0x30);
 }
 
