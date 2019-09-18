@@ -2,7 +2,10 @@
 // this sketch was created and designed
 // by Kevin Rietveld
 
+//
 // - Version 0.01
+//
+
 
 #include <Keyboard.h>
 #include <Keypad.h> 
@@ -109,12 +112,12 @@ const unsigned char ttable[7][4] = {
 byte rowPins[NUMROWS] = { 6,  7,  8,  9 };  // Connect to the row pinouts of the keypad
 byte colPins[NUMCOLS] = { 15, 14, 16, 10 }; // Connect to the column pinouts of the keypad
 
-//initialize an instance of class NewKeypad
+// initialize an instance of class NewKeypad
 Keypad buttbx = Keypad(makeKeymap(buttons), rowPins, colPins, NUMROWS, NUMCOLS);
 
 void initLeds() {
 
-  //  initialize all analog pins as output for leds
+  // initialize all analog pins as output for leds
   pinMode(ledpinA0,OUTPUT);  
   pinMode(ledpinA1,OUTPUT);
   pinMode(ledpinA2,OUTPUT);
