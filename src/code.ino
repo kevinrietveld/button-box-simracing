@@ -130,25 +130,26 @@ void initLeds() {
   analogWrite(ledpinA2,128);
   analogWrite(ledpinA3,128);
 
+  // Led 0 always on 
+  digitalWrite(ledpinA0,HIGH);
 }
 
-void blinkLeds(int times = 3) {
+void blinkLedRow(int times = 3) {
   for (int i = 0; i < times; i++)
   {
     digitalWrite(ledpinA1,HIGH); delay(200);
     digitalWrite(ledpinA2,HIGH); delay(200);
     digitalWrite(ledpinA3,HIGH); delay(200);
-    digitalWrite(ledpinA0,HIGH); delay(200);
     digitalWrite(ledpinA1,LOW);
     digitalWrite(ledpinA2,LOW);
     digitalWrite(ledpinA3,LOW);
-    digitalWrite(ledpinA0,LOW);
   }
 }
 
 void setup() {
+  // Initialize leds
   initLeds();
-  blinkLeds(3);
+  blinkLedRow(3);
   
   Keyboard.begin();
   rotary_init();
