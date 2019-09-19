@@ -132,7 +132,7 @@ void initLeds() {
   digitalWrite(ledpinA0,HIGH);
 }
 
-void blinkLedRow(int times = 3) {
+void blinkLedRow(int times = 3, bool stayOnAfterBlink) {
   for (int i = 0; i < times; i++)
   {
     digitalWrite(ledpinA1,HIGH); delay(250);
@@ -142,12 +142,19 @@ void blinkLedRow(int times = 3) {
     digitalWrite(ledpinA2,LOW);
     digitalWrite(ledpinA3,LOW);
   }
+
+  if(stayOnAfterBlink)
+  {
+    digitalWrite(ledpinA1,HIGH);
+    digitalWrite(ledpinA2,HIGH);
+    digitalWrite(ledpinA3,HIGH);
+  }
 }
 
 void setup() {
   // Initialize leds
   initLeds();
-  blinkLedRow(3);
+  blinkLedRow(3, true);
   
   Keyboard.begin();
   rotary_init();
@@ -168,7 +175,7 @@ void buttonPress(char keyPress) {
       uint8_t led = ledMap[idx][1];
       Keyboard.write(key);
       digitalWrite(led, LOW);
-      delay(150);
+      delay(100);
       Keyboard.release(key);
       digitalWrite(led, HIGH);
     }
