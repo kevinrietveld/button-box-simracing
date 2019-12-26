@@ -7,7 +7,7 @@
 //
 
 
-#include <Keyboard.h>
+#include <Keypad.h>
 #include <Joystick.h>
 
 // Variables
@@ -41,10 +41,10 @@ boolean ledA3_state;
 // Define the symbols on the buttons of the keypads               
 char buttons[NUMROWS][NUMCOLS] = {
   // 15  14  16, 10
-  { 'a','b','c','d' },     // 6
-  { 'e','f','g','h' },     // 7
-  { 'i','j','k','l' },     // 8   
-  { 'm','n','o','p' }      // 9
+  {  0,  1,  2,  3  },     // 6
+  {  4,  5,  6,  7  },     // 7
+  {  8,  9,  10, 11 },     // 8   
+  {  12, 13, 14, 15 }      // 9
 };
 
 // Define the rotary encoders
@@ -57,41 +57,42 @@ struct rotariesdef {
 };
 
 rotariesdef rotaries[NUMROTARIES] {
-  { 0, 1, 'q', 'r' }, // encoder connected to pin 0 and 1 (TX0/RX1)
-  { 2, 3, 's', 't' }, // encoder connected to pin 2 and 3
-  { 4, 5, 'u', 'v' }, // encoder connected to pin 4 and 5
+  { 0, 1, 16, 17 }, // encoder connected to pin 0 and 1 (TX0/RX1)
+  { 2, 3, 18, 19 }, // encoder connected to pin 2 and 3
+  { 4, 5, 20, 21 }, // encoder connected to pin 4 and 5
 };
 
 // Define the mapping between button and led 
 int ledMapButtons[][2] = {
   // Buttons
-  { 'a', ledpinA0 },
-  { 'b', ledpinA0 },
-  { 'c', ledpinA0 },
-  { 'd', ledpinA0 },
-  { 'e', ledpinA0 },
-  { 'f', ledpinA0 },
-  { 'g', ledpinA0 },
-  { 'h', ledpinA0 },
-  { 'i', ledpinA0 },
-  { 'j', ledpinA0 },
-  { 'k', ledpinA0 },
-  { 'l', ledpinA0 },
-  { 'm', ledpinA0 },
-  { 'n', ledpinA0 },
-  { 'o', ledpinA0 }
+  { 0 , ledpinA0 },
+  { 1 , ledpinA0 },
+  { 2 , ledpinA0 },
+  { 3 , ledpinA0 },
+  { 4 , ledpinA0 },
+  { 5 , ledpinA0 },
+  { 6 , ledpinA0 },
+  { 7 , ledpinA0 },
+  { 8 , ledpinA0 },
+  { 9 , ledpinA0 },
+  { 10, ledpinA0 },
+  { 11, ledpinA0 },
+  { 12, ledpinA0 },
+  { 13, ledpinA0 },
+  { 14, ledpinA0 },
+  { 15, ledpinA0 }
 };
 
 // Define the mapping between button and led 
 int ledMapRotaries[][2] = {
   // Rotary
-  { 'q', ledpinA0 },
-  { 'r', ledpinA0 },
-  { 's', ledpinA0 },
-  { 't', ledpinA0 },
-  { 'u', ledpinA0 },
-  { 'v', ledpinA0 }
-}
+  { 16, ledpinA0 },
+  { 17, ledpinA0 },
+  { 18, ledpinA0 },
+  { 19, ledpinA0 },
+  { 20, ledpinA0 },
+  { 21, ledpinA0 }
+};
 
 const unsigned char ttable[7][4] = {
   // R_START
@@ -233,7 +234,7 @@ unsigned char rotary_process(int _i) {
 
 void CheckAllEncoders(void) {
   for (int idx = 0; idx < NUMROTARIES; idx++) {
-    unsigned char result = rotary_process(i);
+    unsigned char result = rotary_process(idx);
     
     if (result == DIR_CCW) {
       uint8_t led = ledMapRotaries[idx][1];
