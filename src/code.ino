@@ -3,12 +3,12 @@
 // by Kevin Rietveld
 
 //
-// - Version 0.01
+// - Version 0.02
 //
 
 
 #include <Keyboard.h>
-#include <Keypad.h> 
+#include <Joystick.h>
 
 // Variables
 #define ENABLE_PULLUPS
@@ -63,8 +63,7 @@ rotariesdef rotaries[NUMROTARIES] {
 };
 
 // Define the mapping between button and led 
-int ledMap[][2] = {
-
+int ledMapButtons[][2] = {
   // Buttons
   { 'a', ledpinA0 },
   { 'b', ledpinA0 },
@@ -80,8 +79,11 @@ int ledMap[][2] = {
   { 'l', ledpinA0 },
   { 'm', ledpinA0 },
   { 'n', ledpinA0 },
-  { 'o', ledpinA0 },
+  { 'o', ledpinA0 }
+};
 
+// Define the mapping between button and led 
+int ledMapRotaries[][2] = {
   // Rotary
   { 'q', ledpinA0 },
   { 'r', ledpinA0 },
@@ -89,8 +91,7 @@ int ledMap[][2] = {
   { 't', ledpinA0 },
   { 'u', ledpinA0 },
   { 'v', ledpinA0 }
-};
-
+}
 
 const unsigned char ttable[7][4] = {
   // R_START
@@ -114,6 +115,11 @@ byte colPins[NUMCOLS] = { 15, 14, 16, 10 }; // Connect to the column pinouts of 
 
 // initialize an instance of class NewKeypad
 Keypad buttbx = Keypad(makeKeymap(buttons), rowPins, colPins, NUMROWS, NUMCOLS);
+
+Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID, 
+  JOYSTICK_TYPE_JOYSTICK, 32, 0,
+  false, false, false, false, false, false,
+  false, false, false, false, false);
 
 void initLeds() {
 
@@ -157,7 +163,7 @@ void setup() {
   initLeds();
   blinkLedRow(3, true);
   
-  Keyboard.begin();
+  Joystick.begin();
   rotary_init();
 }
 
@@ -166,35 +172,38 @@ void loop() {
   CheckAllButtons();
 }
 
-// Key as input, gets the corresponding led, wirte the key and blinks the led
-void buttonPress(char keyPress, bool isRotary) {
-  for (int idx = 0; idx < NUMBUTTONS+(NUMROTARIES*2); idx++)
+void buttonPress() {
+  for (int idx = 0; idx < NUMBUTTONS; idx++)
   {
-    char key = ledMap[idx][0];
-    if(key == keyPress)
+    if(buttbx.key[idx].stateChanged)
     {
-      uint8_t led = ledMap[idx][1];
-      Keyboard.write(key);
-      digitalWrite(led, LOW);
-
-      if(isRotary)
+      uint8_t led = ledMapButtons[idx][1];
+      
+      switch(buttbx.key[idx].kstate)
       {
-        delay(50);
-      }
-      else
-      {
-        delay(500);
+        case PRESSED:
+        case HOLD:
+          // Pressed
+          Joystick.setButton(buttbx.key[idx].kchar, 1);
+          digitalWrite(led, LOW);
+          break;    
+        case RELEASED:
+        case IDLE:
+          // Released
+          Joystick.setButton(buttbx.key[idx].kchar, 0);
+          digitalWrite(led, HIGH);
+          break;
       }
       
-      Keyboard.release(key);
-      digitalWrite(led, HIGH);
     }
   }
 }
 
 void CheckAllButtons(void) {
-  char key = buttbx.getKey();
-  buttonPress(key, false);
+  if(buttbx.getKeys())
+  {
+    buttonPress();
+  }
 }
 
 /* Call this once in setup() */
@@ -223,10 +232,24 @@ unsigned char rotary_process(int _i) {
 
 
 void CheckAllEncoders(void) {
-  for (int i = 0; i < NUMROTARIES; i++) {
+  for (int idx = 0; idx < NUMROTARIES; idx++) {
     unsigned char result = rotary_process(i);
-    if (result) {
-      buttonPress(result == DIR_CCW ? rotaries[i].ccwchar : rotaries[i].cwchar, true);
+    
+    if (result == DIR_CCW) {
+      uint8_t led = ledMapRotaries[idx][1];
+      Joystick.setButton(rotaries[idx].ccwchar, 1);
+      digitalWrite(led, LOW);
+      delay(50);
+      Joystick.setButton(rotaries[idx].ccwchar, 0);
+      digitalWrite(led, HIGH);
+    }
+    else if (result == DIR_CW) {
+      uint8_t led = ledMapRotaries[idx][1];
+      Joystick.setButton(rotaries[idx].cwchar, 1);
+      digitalWrite(led, LOW);
+      delay(50);
+      Joystick.setButton(rotaries[idx].cwchar, 0);
+      digitalWrite(led, HIGH);
     }
   }
 }
