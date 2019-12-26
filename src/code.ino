@@ -24,8 +24,8 @@
 
 #define DIR_CCW 0x10
 #define DIR_CW 0x20
-
 #define R_START 0x0
+
 #define R_CW_FINAL 0x1
 #define R_CW_BEGIN 0x2
 #define R_CW_NEXT 0x3
@@ -132,8 +132,8 @@ void initLeds() {
   digitalWrite(ledpinA0,HIGH);
 }
 
-void blinkLedRow(int times = 3, bool stayOnAfterBlink) {
-  for (int i = 0; i < times; i++)
+void blinkLedRow(int times = 3, bool stayOnAfterBlink = true) {
+  for (int i = 0; i <= times; i++)
   {
     digitalWrite(ledpinA1,HIGH); delay(250);
     digitalWrite(ledpinA2,HIGH); delay(250);
@@ -141,6 +141,7 @@ void blinkLedRow(int times = 3, bool stayOnAfterBlink) {
     digitalWrite(ledpinA1,LOW);
     digitalWrite(ledpinA2,LOW);
     digitalWrite(ledpinA3,LOW);
+    delay(250);
   }
 
   if(stayOnAfterBlink)
@@ -166,8 +167,8 @@ void loop() {
 }
 
 // Key as input, gets the corresponding led, wirte the key and blinks the led
-void buttonPress(char keyPress) {
-  for (int idx = 0; idx < NUMBUTTONS; idx++)
+void buttonPress(char keyPress, bool isRotary) {
+  for (int idx = 0; idx < NUMBUTTONS+(NUMROTARIES*2); idx++)
   {
     char key = ledMap[idx][0];
     if(key == keyPress)
@@ -175,7 +176,16 @@ void buttonPress(char keyPress) {
       uint8_t led = ledMap[idx][1];
       Keyboard.write(key);
       digitalWrite(led, LOW);
-      delay(100);
+
+      if(isRotary)
+      {
+        delay(50);
+      }
+      else
+      {
+        delay(500);
+      }
+      
       Keyboard.release(key);
       digitalWrite(led, HIGH);
     }
@@ -184,7 +194,7 @@ void buttonPress(char keyPress) {
 
 void CheckAllButtons(void) {
   char key = buttbx.getKey();
-  buttonPress(key);
+  buttonPress(key, false);
 }
 
 /* Call this once in setup() */
@@ -216,8 +226,7 @@ void CheckAllEncoders(void) {
   for (int i = 0; i < NUMROTARIES; i++) {
     unsigned char result = rotary_process(i);
     if (result) {
-      buttonPress(result == DIR_CCW ? rotaries[i].ccwchar : rotaries[i].cwchar);
-      // Maybe use delay of 50 and without key release
+      buttonPress(result == DIR_CCW ? rotaries[i].ccwchar : rotaries[i].cwchar, true);
     }
   }
 }
